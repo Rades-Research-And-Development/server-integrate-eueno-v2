@@ -1,11 +1,11 @@
 import Eueno from '@eueno/lib-node';
-import path from 'path'
+
 import fs from 'fs';
 import axios from 'axios';
 import * as ethers from 'ethers';
 const END_POINT = 'https://v2-developers.eueno.io';
 
-const projectKeyForDucAccount =
+const projectKeyForFirstAccount =
   '7587cc8d2ed602f274e688f6a27a8ccd5d2228f40e382420ab9954878283dbd0';
 
 export class OraichainEueno {
@@ -148,21 +148,17 @@ export class OraichainEueno {
 //  use include :
 // - privateKey wallet
 // - project key
-const projecKeyForNoNameAccount =
+const projectKeyForSecondAccount =
   '2d06bf7855092a2572a7b9a2c274b0574909badbf2bac855059f11edc6f39512';
-const projecKeyForNoNameAccountV2 =
+const projectKeyForThreeAccount =
   '3e47ca7f5877e7a86ef1d43c9b6980657c818ba04ea2ff336b63b15167b7ffcc';
 const mmemomicForNoNameAccount =
   'bamboo mail february tone update win involve vote thank sting wild meadow';
 const mmemomicForDucAccount =
   'hockey repair uncover horror shove limb wink blur into clog visit pottery';
 export const euenoInstance = new OraichainEueno({
-  projectKey: projectKeyForDucAccount,
+  projectKey: projectKeyForFirstAccount,
   mmemomic: mmemomicForDucAccount,
 });
 
-// euenoInstance.uploadFile({
-//   projectId: 286,
-//   path: 'images/1109d87fcecfc9c86fbd8d1dd4fd35cfchang-trai-liem-dien-thoai-mlem-mlem (1).jpeg',
-//   name: 'chun_test.jpeg',
-// });
+

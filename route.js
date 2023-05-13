@@ -4,15 +4,12 @@ import multer from 'multer';
 import path from 'path';
 const __dirname = path.resolve();
 const router = express.Router();
-router.get('/picture', (req, res) => {
-  // res.send('hello')
-});
 // handle uploadImage
 router.post('/upload-image', multer().single('file'), async (req, res) => {
   try {
     const { projectId } = req.body;
     const { buffer, mimetype, originalname } = req.file;
-    console.log('req.body', req.file, req.body.projectId);
+
 
     const data = await euenoInstance.uploadFile({
       projectId,
@@ -27,6 +24,7 @@ router.post('/upload-image', multer().single('file'), async (req, res) => {
     console.log(error);
   }
 });
+// get list file in folder by folder Id
 router.post('/get-files', async (req, res) => {
   try {
     console.log('req.body', req);
@@ -38,21 +36,26 @@ router.post('/get-files', async (req, res) => {
     const data = await euenoInstance.getListFileToFolderId({
       projectId: projectId,
     });
-    console.log('data', data);
+
     res.send(data);
   } catch (error) {
     res.send(error);
   }
 });
+router.get('/share-file', async (req, res) => {
+
+});
+
+// get detail file by ID
 router.get('/get-file/:id', async (req, res) => {
   const { id } = req.params;
   const fileName = await euenoInstance.getFileTorId({
     fileId: id,
   });
-  console.log('fileName', fileName);
+
 
   const filePath = path.join(__dirname, 'images', fileName);
-  console.log('filePath', filePath);
+
   const options = {
     headers: {
       'Content-Disposition': `attachment; filename=${fileName}`,
