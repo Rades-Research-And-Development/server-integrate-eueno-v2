@@ -1,0 +1,2 @@
+upload POST: http://13.213.46.85:1337/upload-image
+get list  GET: http://13.213.46.85:1337/get-files

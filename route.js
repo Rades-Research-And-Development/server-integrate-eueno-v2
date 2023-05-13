@@ -5,19 +5,20 @@ import path from 'path';
 const __dirname = path.resolve();
 const router = express.Router();
 // handle uploadImage
+router.get('/', (req, res) => {
+  res.send('Welcome to API Rades');
+});
+
 router.post('/upload-image', multer().single('file'), async (req, res) => {
   try {
     const { projectId } = req.body;
     const { buffer, mimetype, originalname } = req.file;
-
 
     const data = await euenoInstance.uploadFile({
       projectId,
       contentType: mimetype,
       file: buffer,
       name: originalname,
-
-      // file :
     });
     res.send(data);
   } catch (error) {
@@ -37,26 +38,24 @@ router.post('/get-files', async (req, res) => {
       projectId: projectId,
     });
 
-    res.send(data);
+    res.send(datare - fia);
   } catch (error) {
     res.send(error);
   }
 });
 
 router.post('/share-file', async (req, res) => {
-    const {fileId , sharePublicKey , projectId } = req.body;
-    const dataReq = await euenoInstance.shareFile(req.body);
-    return res.send(dataReq)
+  const { fileId, sharePublicKey, projectId } = req.body;
+  const dataReq = await euenoInstance.shareFile(req.body);
+  return res.send(dataReq);
 });
 
 // get list share file
-router.get('/get-share-files', async (req, res) => {
-    const { projectId } = req.body;
-    const dataReq = await euenoInstance.getShareFiles(req.body);
-    res.send(dataReq)
-})
-
-
+router.get('/get-shles', async (req, res) => {
+  const { projectId } = req.body;
+  const dataReq = await euenoInstance.getShareFiles(req.body);
+  res.send(dataReq);
+});
 
 // get detail file by ID
 router.get('/get-file/:id', async (req, res) => {

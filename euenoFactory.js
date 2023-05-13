@@ -73,6 +73,12 @@ export class OraichainEueno {
       console.log(e);
     }
   };
+  saveFile(name, buffer)  {
+    fs.writeFile( name, Buffer.from(buffer), (err) => {
+      if (err) throw err;
+      console.log('Image saved!');
+    });
+  }
 
   getFileTorId = async ({ fileId }) => {
     const raw = await this.eueno.getObjectDetail({
@@ -94,10 +100,7 @@ export class OraichainEueno {
       aes.fileEncryptionKey,
       aes.iv
     );
-    fs.writeFile('images/' + data.name, Buffer.from(buffer), (err) => {
-      if (err) throw err;
-      console.log('Image saved!');
-    });
+    this.saveFile('images/' + data.name, buffer )
     return  data.name
 
   };
