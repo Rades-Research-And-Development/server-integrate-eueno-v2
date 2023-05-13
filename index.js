@@ -13,6 +13,6 @@ app.use(express.json({ limit: '50mb' }));
 app.use(router);
 
 app.use(express.urlencoded({ extended: true }));
-app.listen(3000, () => {
+app.listen(1337, () => {
   console.log('server is running on port 3000');
 });
