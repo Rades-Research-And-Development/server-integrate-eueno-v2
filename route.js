@@ -42,9 +42,21 @@ router.post('/get-files', async (req, res) => {
     res.send(error);
   }
 });
-router.get('/share-file', async (req, res) => {
 
+router.post('/share-file', async (req, res) => {
+    const {fileId , sharePublicKey , projectId } = req.body;
+    const dataReq = await euenoInstance.shareFile(req.body);
+    return res.send(dataReq)
 });
+
+// get list share file
+router.get('/get-share-files', async (req, res) => {
+    const { projectId } = req.body;
+    const dataReq = await euenoInstance.getShareFiles(req.body);
+    res.send(dataReq)
+})
+
+
 
 // get detail file by ID
 router.get('/get-file/:id', async (req, res) => {
@@ -52,7 +64,6 @@ router.get('/get-file/:id', async (req, res) => {
   const fileName = await euenoInstance.getFileTorId({
     fileId: id,
   });
-
 
   const filePath = path.join(__dirname, 'images', fileName);
 

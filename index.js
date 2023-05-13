@@ -11,7 +11,7 @@ app.use(compression());
 
 app.use(express.json({ limit: '50mb' }));
 app.use(router);
-// app.use(express.static('images'))
+
 app.use(express.urlencoded({ extended: true }));
 app.listen(3000, () => {
   console.log('server is running on port 3000');
