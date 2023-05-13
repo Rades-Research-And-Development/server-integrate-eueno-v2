@@ -1,5 +1,5 @@
 import Eueno from '@eueno/lib-node';
-
+import path from 'path'
 import fs from 'fs';
 import axios from 'axios';
 import * as ethers from 'ethers';
@@ -8,7 +8,7 @@ const END_POINT = 'https://v2-developers.eueno.io';
 const projectKeyForDucAccount =
   '7587cc8d2ed602f274e688f6a27a8ccd5d2228f40e382420ab9954878283dbd0';
 
-class OraichainEueno {
+export class OraichainEueno {
   keyGen = 'z4P7jt5FbLqHzzc3wiJXgE55_9SqFwc4u4uR4sKGWGI';
   mmemomic = '';
   projectKey = '';
@@ -45,10 +45,8 @@ class OraichainEueno {
     );
     return key;
   };
-  uploadFile = async ({ projectId, path, name }) => {
+  uploadFile = async ({ projectId, file, name, contentType }) => {
     try {
-      const file = fs.readFileSync(path);
-
       const publicKeyOwner = await this.generateKey();
 
       const data = await this.eueno.upload(
@@ -64,12 +62,12 @@ class OraichainEueno {
           projectId,
           filename: name,
           contentLength: 22313,
-          contentType: 'image/png',
+          contentType,
           method: 'ENCRYPT',
           keepPath: false,
         }
       );
-      console.log('data', data);
+
       return data;
     } catch (e) {
       console.log(e);
@@ -81,7 +79,6 @@ class OraichainEueno {
       fileId,
       projectKey: this.projectKey,
     });
-    console.log('this.privateKeyOwner', this.privateKeyOwner, fileId, raw);
     const data = raw.data;
     const cryptoData = await axios
       .get(data.url, { responseType: 'arraybuffer' })
@@ -92,26 +89,26 @@ class OraichainEueno {
     );
     console.log('aes', aes);
 
-    this.eueno
-      .decryptDataByKeyAes(cryptoData, aes.fileEncryptionKey, aes.iv)
-      .then((buffer) => {
-        // write file
-        fs.writeFile('images/' + data.name, Buffer.from(buffer), (err) => {
-          if (err) throw err;
-          console.log('Image saved!');
-        });
-      });
+    const buffer = await this.eueno.decryptDataByKeyAes(
+      cryptoData,
+      aes.fileEncryptionKey,
+      aes.iv
+    );
+    fs.writeFile('images/' + data.name, Buffer.from(buffer), (err) => {
+      if (err) throw err;
+      console.log('Image saved!');
+    });
+    return  data.name
 
-    return data;
   };
 
-  getListFileToFolderId = async () => {
+  getListFileToFolderId = async ({ projectId }) => {
     try {
       const listFile = await this.eueno.getObjectLists({
         projectId,
         projectKey: this.projectKey,
       });
-      console.log(`list file`, data);
+
       return listFile;
     } catch (error) {
       console.log('err', error);
@@ -159,13 +156,13 @@ const mmemomicForNoNameAccount =
   'bamboo mail february tone update win involve vote thank sting wild meadow';
 const mmemomicForDucAccount =
   'hockey repair uncover horror shove limb wink blur into clog visit pottery';
-const euenoInstance = new OraichainEueno({
+export const euenoInstance = new OraichainEueno({
   projectKey: projectKeyForDucAccount,
   mmemomic: mmemomicForDucAccount,
 });
 
-euenoInstance.uploadFile({
-  projectId: 286,
-  path: 'images/1109d87fcecfc9c86fbd8d1dd4fd35cfchang-trai-liem-dien-thoai-mlem-mlem (1).jpeg',
-  name: 'chun_test.jpeg',
-});
+// euenoInstance.uploadFile({
+//   projectId: 286,
+//   path: 'images/1109d87fcecfc9c86fbd8d1dd4fd35cfchang-trai-liem-dien-thoai-mlem-mlem (1).jpeg',
+//   name: 'chun_test.jpeg',
+// });

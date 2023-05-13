@@ -1,18 +1,18 @@
-// init server and router 
-const express = require('express')
-const router = require('./router')
-const helmet = require('helmet');
-const compression = require('compression');
-const rateLimit = require('express-rate-limit');
-const app = express()
-app.use(router)
-    app.use(helmet());
-  app.use(compression());
-  app.use(rateLimit({ max: 1000, windowMs: 15 * 60 * 1000 }));
+// init server and router
+import express from 'express';
+import router from './route.js';
+import helmet from 'helmet';
+import compression from 'compression';
 
-  app.enableCors();
-  app.use(express.json({ limit: "50mb" }));
+const app = express();
+
+app.use(helmet());
+app.use(compression());
+
+app.use(express.json({ limit: '50mb' }));
+app.use(router);
+// app.use(express.static('images'))
+app.use(express.urlencoded({ extended: true }));
 app.listen(3000, () => {
-    console.log('server is running on port 3000')
-}
-)
+  console.log('server is running on port 3000');
+});
