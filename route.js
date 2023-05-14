@@ -2,6 +2,8 @@ import express from 'express';
 import { OraichainEueno, euenoInstance } from './euenoFactory.js';
 import multer from 'multer';
 import path from 'path';
+import axios from 'axios';
+
 const __dirname = path.resolve();
 const router = express.Router();
 // handle uploadImage
@@ -80,6 +82,30 @@ router.get('/get-file/:id', async (req, res) => {
       console.log('Sent:', fileName);
     }
   });
+});
+router.post('/airight', multer().single('file'), async (req, res) => {
+  const file = req.file;
+  console.log('file', file);
+  const fileBlobTest = new Blob([file.buffer], { type: file.mimetype });
+  const API_KEY_AIRIGHT =
+    'esyYxzf5w9cUUsXnvLfnESc5rZ43JG6aTys24RdVctx2cYQUC2ZdXGUdkr9KBvX1';
+  console.log('file', file);
+  const AIRIGHT_ENDPOINT =
+    'https://staging-api-aioracle.airight.io/api-key/report/';
+  const formData = new FormData();
+  formData.append('image', fileBlobTest);
+  const config = {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'api-key': API_KEY_AIRIGHT,
+      'Access-Control-Allow-Origin': '*',
+    },
+  };
+  //   console.log('formData', formData);
+  const response = await axios.post(AIRIGHT_ENDPOINT, formData, config);
+  console.log(response.data);
+
+  req.send(response.data);
 });
 
 export default router;
